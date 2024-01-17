@@ -1,0 +1,44 @@
+<div class="container mt-5">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="card" *ngIf="!showRegister">
+            <a class="login">Log in</a>
+
+            <div class="inputBox">
+                <input type="text" [(ngModel)]="Lemail" required="required">
+                <span class="user">Email</span>
+            </div>
+
+            <div class="inputBox">
+                <input type="password" [(ngModel)]="Lpassword" required="required">
+                <span>Password</span>
+            </div>
+
+            <button class="enter" (click)="Login()">Log in</button>
+            <p class="">Don't have any account ? <a class="text-primary" style="cursor: pointer;" (click)="EnableRegisterForm(true)">Register</a></p>
+        </div>
+
+
+        <div class="card" *ngIf="showRegister">
+            <a class="login">Register</a>
+
+            <div class="inputBox">
+                <input type="text" [(ngModel)]="username" required="required">
+                <span class="user">Username</span>
+            </div>
+            <div class="inputBox">
+                <input type="text" [(ngModel)]="email" required="required">
+                <span class="user">Gmail</span>
+            </div>
+
+            <div class="inputBox">
+                <input type="password" [(ngModel)]="password" required="required">
+                <span>Password</span>
+            </div>
+
+            <button class="enter" (click)="Register()">Register</button>
+            <p class="">Don't have any account ? <a class="text-primary" style="cursor: pointer;" (click)="EnableRegisterForm(false)">Login</a></p>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>
