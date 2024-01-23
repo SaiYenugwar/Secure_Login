@@ -23,6 +23,16 @@ export class LoginComponent implements OnInit {
     if(a){
       this.Router.navigate(['/Home']);
     }
+
+    this.authService.Login(this.Lemail, this.Lpassword).subscribe(
+      (response) => {
+        this.loader = false ;
+        console.log(response)
+      },
+      (error) => {
+        console.error('Auth failed:', error);
+      }
+      )
   }
 
   username: string = '';
@@ -31,6 +41,8 @@ export class LoginComponent implements OnInit {
   Lemail: string = '';
   Lpassword: string = '';
   showRegister: boolean = false;
+
+  loader:boolean = true;
 
   EnableRegisterForm(a:any){
     if(a==true){
