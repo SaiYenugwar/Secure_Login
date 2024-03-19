@@ -5,11 +5,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { SharedModule } from '../shared/shared/shared.module';
 import { UserService } from '../service/user.service';
 import { CommonModule } from '@angular/common';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SharedModule,CommonModule],
+  imports: [SharedModule,CommonModule,LoaderComponent],
   providers: [MessageService,ConfirmationService],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
@@ -32,6 +33,7 @@ export class HomeComponent implements OnInit {
   Newpassword: string = '';
 
   visible: boolean = false;
+  loader: boolean = false;
 
 
   logout(){
@@ -63,30 +65,37 @@ export class HomeComponent implements OnInit {
   
 
   performDelete(){
+    this.loader = true;
     this.userService.Delete(this.email).subscribe((response)=>{
         if(response.success === true){
           this.messageService.add({severity:'success',summary:"Confirmation",detail:response.message});
           this.cookieService.delete('token');
           this.cookieService.delete('username');
           this.cookieService.delete('email');
+          this.loader = false;
           setTimeout(()=>{
           this.Router.navigate(['/Login']);
           },2000)
         }else{
           this.messageService.add({ severity: 'error', summary: 'Invalid', detail: response.message });
           console.log('Delete User failed:', response);
+          this.loader = false;
         }
         },
         (error) => {
           this.messageService.add({ severity: 'error', summary: 'Error ', detail: 'Server failed',});
           console.error('Delete User failed:', error);
+          this.loader = false;
         })
 
       }
 
   update(){
+    this.loader = true;
+
    this.userService.Update(this.email,this.Oldpassword,this.Newpassword).subscribe(
     (response)=>{
+      this.loader = false;
       if(response.success === true){
         this.messageService.add({severity:'success',summary:"Update",detail:response.message});
         this.closeDialog();
@@ -100,7 +109,8 @@ export class HomeComponent implements OnInit {
    },
    (error) => {
     this.messageService.add({ severity: 'error', summary: 'Error ', detail: 'Server failed',});
-    console.error('Delete User failed:', error);
+    console.error('Error:', error);
+    this.loader = false;
   })
   }
 

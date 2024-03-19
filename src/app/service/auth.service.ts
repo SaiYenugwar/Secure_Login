@@ -20,8 +20,6 @@ export class AuthService {
     return this.http.post(CONFIG.AUTH.REGISTER, data)
   }
 
-  Auth():Observable<any>{
-    return this.http.get(CONFIG.AUTH.LOGIN)
-  }
+
 
 }

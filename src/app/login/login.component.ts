@@ -5,11 +5,12 @@ import { SharedModule } from '../shared/shared/shared.module';
 import { MessageService } from 'primeng/api';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
+import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule,SharedModule],
+  imports: [CommonModule,SharedModule,LoaderComponent],
   providers: [MessageService,CookieService],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -24,15 +25,6 @@ export class LoginComponent implements OnInit {
       this.Router.navigate(['/Home']);
     }
 
-    this.authService.Login(this.Lemail, this.Lpassword).subscribe(
-      (response) => {
-        this.loader = false ;
-        console.log(response)
-      },
-      (error) => {
-        console.error('Auth failed:', error);
-      }
-      )
   }
 
   username: string = '';
@@ -42,7 +34,7 @@ export class LoginComponent implements OnInit {
   Lpassword: string = '';
   showRegister: boolean = false;
 
-  loader:boolean = true;
+  loader:boolean = false;
 
   EnableRegisterForm(a:any){
     if(a==true){
@@ -53,9 +45,11 @@ export class LoginComponent implements OnInit {
   }
 
   Login() {
+    this.loader = true;
     if (this.Lemail && this.Lpassword) {
       this.authService.Login(this.Lemail, this.Lpassword).subscribe(
         (response) => {
+          this.loader = false;
           // console.log('Server Response:', response);
   
           if (response.success === true) {
@@ -79,10 +73,12 @@ export class LoginComponent implements OnInit {
         },
         (error) => {
           console.error('Login failed:', error);
+          this.loader = false;
         }
       );
     } else {
       this.messageService.add({severity:'warn',summary:"Warning",detail:"Please Enter Email & Password"});
+      this.loader = false;
     }
   }
   
